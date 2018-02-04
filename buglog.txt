@@ -1,0 +1,78 @@
+Bug log
+(there were more, these are the ones we remember)
+
+IDT
+Keyboard/RTC didn't work because didn't set correct privs/present bits/etc in idt. Navid & Benson fixed this by taking into account for the missed bits.
+
+Keyboard
+Didn't account for keyup when getting scancode. Saleh & Bala fixed this by looking at the scancode for keyups and ignoring them. Also included in this is getting random key bugs (with shifts and capslock) to work. We debugged by printf
+
+RTC 
+RTC read was using an if statement, not while loop, had read errors. Benson & Navid fixed because a TA told us this was wrong during a checkpoint.
+
+RTC 
+RTC wasn't writing correct frequency, fish in terminal didn’t work. Bala fixed this in an afternoon. The argument was changed to a shifted multiple of 2. 
+Terminal Kept writing to screen even after limit of 128 Navid fixed this after checkpoint; TA told us to fix it. It was an if statement.
+
+Filesystem 
+Read Data was not byte addressable, reading fish had random strings. Group fixed this by reorganizing file system structs and read_data function. Read_data now takes in uint_8 with the correction.
+
+Paging 
+enablepaging had cr0 and cr3 in the wrong order Took us a couple of hours to realize. We thought our error was elsewhere in paging. Eventually we gdb’d through and found the solution.
+
+Terminal 
+Backspace would delete stuff not supposed to be deleted like shell. Super quick fix. Someone in our group fixed this by adding different terminals for scheduling.
+
+Terminal 
+Switching terminals created extra characters/wrong buffer. Same as previous comment. Same people fixing.
+
+Filesystem 
+read dentry by filename looped through too many entries. Group fixed this because we saw that we were reading the wrong number of inodes. Took an hour or so. 
+
+Filesystem 
+filesystem address was hardcoded; if too many things were on stack, did not read data accurately. Saleh rewrote using structs in an hour or so. 
+
+Filesystem 
+filesystem didn’t account for reading extra blocks in inode if had a offset. Saleh fixed this before the deadline, maybe two hours after not recognizing this bug. 
+
+System call 
+System call linkage started from 0 not 1. One minute fix. This was fixed this by Benson and Navid changing this in the Jump Table in Wrapper.S
+
+System call 
+When context switching, user data segment / user code segment not 
+set. This was fixed by looking up online on what the stack looks like right before IRET is called. The group worked on this. 
+
+System call
+Parse argument didn’t account for \0. Benson and Navid fixed this super simple added/revised our check after class.
+
+Filesystem
+Bad pointer math between uint32_t and uint8_t. We changed some structs. This took us too long for how simple the error is. We were initially confused at the pointer math. 
+
+System call
+Context switch was not returning to parent rather restarting the parent process. We were not accounting for the ebp and esp properly. Fixed in wrapper.s functions. 
+
+System call
+Open checked filetype using strncmp instead of inode.filetype. TA told us during demo. Quick fix as a group.
+
+System call
+Was not copying back file descriptor in halt. Syserr showed us this was an issue and we debugged this as a group during a work session and took towards an hour to fix all errors.
+
+System call
+Did not have proper handlers for vidmem and getargs in system linkage. Fixed in Wrappers.S. Easy fix by Benson.
+
+System call
+Was not changing tss.esp0 in halt. The stack in physical memory wasn’t correct. We fixed by updating tss.esp0 with the correct parent pointers.
+
+System call
+Parent page went to the previous process number, not parent. We changed some stuff for pcb. Fixed this as a group.
+
+System call
+INT call was set up as Interrupt vector not Trap vector. TA told us that we didn’t set up interrupt right, and we were having some trouble. We don’t exactly remember. We changed some properties on the IDT.
+
+System call
+Halt didn’t return status, wasn’t returned in context switch
+
+Scheduling
+switching between process requiring more than one process; page faults. As of writing this document, we pulled an all nighter and we are still here trying to fix this. As a group. gdb, TAs, you name it
+
+- 
